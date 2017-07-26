@@ -24,7 +24,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.border.Border;
-import org.apache.commons.math.MathException;
+
+import org.apache.commons.math3.distribution.NormalDistribution;
+//import org.apache.commons.math.MathException;
 import pert.CLayout.MyPanel;
 
 
@@ -37,7 +39,7 @@ public final class CLayout {
      public JPanel b,result,data;
      public JTextArea datata;
      public JTextField datatf;
-     
+     public NormalDistribution nd;
  public   JButton b1,b2;
  public String prob;
 public  String[] fromact={},toact={},adesc={},oduration={},eduration={},pduration={},distinctact={};
@@ -135,35 +137,7 @@ public     CardLayout cl;
    
     data.add(datagb);
     
-//    databb.addActionListener(
-//             new ActionListener(){
-//             @Override
-//             public void actionPerformed(ActionEvent event){
-//                 String s3=datatf.getText();
-//   dur=Float.parseFloat(s3);
-//            Probcal ob1=new Probcal(meanp,devp,dur);
-//                 try {
-//                     zprob =ob1.before();
-//                 } catch (MathException ex) {
-//                     Logger.getLogger(CLayout.class.getName()).log(Level.SEVERE, null, ex);
-//                 }
-//            adds(" Probability="+zprob);
-//            
-//             }});
-//     dataab.addActionListener(
-//             new ActionListener(){
-//             @Override
-//             public void actionPerformed(ActionEvent event){
-//                  String s3=datatf.getText();
-//   dur=Float.parseFloat(s3);
-//            Probcal ob1=new Probcal(meanp,devp,dur);
-//                 try {
-//                     zprob=ob1.after();
-//                 } catch (MathException ex) {
-//                     Logger.getLogger(CLayout.class.getName()).log(Level.SEVERE, null, ex);
-//                 }
-//            adds(" Probability="+zprob);
-//             }});
+//  
       datagb.addActionListener(
              new ActionListener(){
              @Override
@@ -174,14 +148,14 @@ public     CardLayout cl;
    double z=Math.abs(dur-meanp)/Math.sqrt(devp);
     String s4=(""+z);
             adds("Z for given duration is"+s4);
-            Probcal ob1=new Probcal(meanp,devp,dur);
-                 try {
-                     zprob=ob1.given();
-                 } catch (MathException ex) {
-                     Logger.getLogger(CLayout.class.getName()).log(Level.SEVERE, null, ex);
-                 }
+            
+                 nd =new  NormalDistribution((double)meanp,(double)devp);
+           zprob=(float)nd.cumulativeProbability(dur);
              adds(" Probability for completion for given duration="+zprob);
-             }});
+             }
+
+         
+     });
     
     datata.setFont(new Font("Serif",Font.PLAIN,20));
     datata.setSize(result.getWidth(), result.getHeight());
